@@ -11,6 +11,8 @@ import com.example.students_management.model.UniversityClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -27,9 +29,13 @@ public class StudentService {
     }
 
     public Student addStudent(Student student){
-        if(student.getName().isEmpty()){
-            throw new StudentEmptyNameException("Student name cannot be empty");
+        LocalDate dob = LocalDate.parse(student.getDateOfBirth());
+        LocalDate now = LocalDate.now();
+        Period age = Period.between(dob, now);
+        if (dob.isAfter(now) || age.getYears() < 10) {
+            throw new IllegalArgumentException("Invalid date of birth or age!!  \nstudent must be at least 10 years old.\n");
         }
+
         return studentDao.save(student);
     }
 

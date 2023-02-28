@@ -11,6 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @RestController
@@ -54,9 +57,13 @@ public class StudentController {
         try{
             Student savedStudent = studentService.addStudent(student);
             return ResponseEntity.ok("Registered Student. Name :"+ student.toString());
-        }catch (StudentEmptyNameException e){
+
+        }catch (IllegalArgumentException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }catch (DateTimeParseException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid date format. Please use yyyy-MM-dd format");
         }
+
 }
 
     @PostMapping(path = "assignclass/{sid}/{cid}")

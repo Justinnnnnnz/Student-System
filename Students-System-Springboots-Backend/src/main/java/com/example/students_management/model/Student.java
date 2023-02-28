@@ -6,7 +6,7 @@ import java.time.Period;
 import java.time.format.DateTimeParseException;
 
 @Entity
-@Table(name="student")
+@Table(name="student_test")
 public class Student {
 
     @Id
@@ -22,18 +22,8 @@ public class Student {
     public Student(Long id, String name, String dateOfBirth) {
         this.id = id;
         this.name = name;
-        //this.dateOfBirth = dateOfBirth;
-        try {
-            LocalDate dob = LocalDate.parse(dateOfBirth);
-            LocalDate now = LocalDate.now();
-            Period age = Period.between(dob, now);
-            if (dob.isAfter(now) || age.getYears() < 10) {
-                throw new IllegalArgumentException("Invalid date of birth or age");
-            }
-            this.dateOfBirth = dateOfBirth;
-        } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException("Invalid date format");
-        }
+        this.dateOfBirth = dateOfBirth;
+
     }
 
     public String getDateOfBirth() {
